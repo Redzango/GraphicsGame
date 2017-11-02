@@ -19,6 +19,7 @@ trait Entity {
     }
 
   def update(delay: Double): Unit
+  def buildPassable : PassableEntity 
 
 
 }

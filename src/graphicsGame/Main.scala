@@ -23,7 +23,7 @@ object Main extends JFXApp {
        * this makes random numbers and checks to see if it is on a wall
        */
       var dificulty = 6
-      val maze = Maze.apply(5, true, 20, 20, .9)
+      val maze = Maze.apply(5, false, 20, 20, .9)
       val level = new Level(maze, Nil)
 
       def randomInt(num: Int, num2: Int): (Int, Int) = {
@@ -102,20 +102,12 @@ object Main extends JFXApp {
         }
       }
       
-    /*  def bomberMove():Unit={
-        var up = maze.bfs(bomber.cx.toInt, bomber.cy.toInt-2, player.cx.toInt, player.cy.toInt)
-        var down = maze.bfs(bomber.cx.toInt, bomber.cy.toInt+2, player.cx.toInt, player.cy.toInt)
-        var left = maze.bfs(bomber.cx.toInt-2, bomber.cy.toInt, player.cx.toInt, player.cy.toInt)
-        var right = maze.bfs(bomber.cx.toInt+2, bomber.cy.toInt, player.cx.toInt, player.cy.toInt)
-        var arr = Array(up,down,left,right)
-        bomber.setDir(arr.indexOf(arr.min))
-      }
-*/
+
       // Used for smooth motion
       var lastTime = 0L
 
       val timer = AnimationTimer(time => {
-        renderer.render(level, player.cx, player.cy)
+        renderer.render(level.buildPassable , player.cx, player.cy)
         fire()
         playerCol()
         enemyCol()

@@ -7,6 +7,7 @@ class Enemy(private var _x: Double, private var _y: Double, val level: Level, pr
   def isEnemy = true
   def isProjectile = false
   def isPlayer = false
+  def buildPassable : PassableEntity = new PassableEntity(1,_x,_y,width,height)
   
   def update(delay: Double): Unit = {
     tick += 1

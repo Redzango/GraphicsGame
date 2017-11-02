@@ -75,7 +75,7 @@ class Maze(val cellSize: Int, val wrap: Boolean, wallsInput: Array[Array[Int]]) 
         }
       }
     }
-    -99
+    1000000
   }
 
 }
@@ -118,6 +118,7 @@ object Maze {
         case (1, 0) => walls(nrow)(ncol) &= ~VerticalWall
         case (0, 1) => walls(nrow)(ncol) &= ~HorizontalWall
         case (-1, 0) => walls(srow)(scol) &= ~VerticalWall
+        case _ =>
       }
       neighbors -= square
       connected(srow)(scol) = true

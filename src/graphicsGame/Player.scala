@@ -1,13 +1,18 @@
 package graphicsGame
 
+import java.rmi.server.UnicastRemoteObject
+
 class Player(private var _x: Double, private var _y: Double, val level: Level,
     private var movingUp: Boolean, private var movingDown: Boolean, private var movingLeft: Boolean, private var movingRight: Boolean,
-    private var fireingUp: Boolean, private var fireingDown: Boolean, private var fireingLeft: Boolean, private var fireingRight: Boolean, private var lastMove: Int) extends Entity {
+    private var fireingUp: Boolean, private var fireingDown: Boolean, private var fireingLeft: Boolean, private var fireingRight: Boolean, 
+    private var lastMove: Int, private var alive: Boolean) extends UnicastRemoteObject with Entity{
   def cx = _x
   def cy = _y
   def isEnemy = false
   def isProjectile = false
   def isPlayer = true
+  def isDie = alive = false
+  def isalive:Boolean = alive
 
   def update(delay: Double): Unit = {
     if (movingUp) {
@@ -23,6 +28,7 @@ class Player(private var _x: Double, private var _y: Double, val level: Level,
       if (level.maze.isClear(_x + delay, _y, 1.25, 1.25)) _x += delay
     }
   }
+  def buildPassable : PassableEntity = new PassableEntity(0,_x,_y,width,height)
 
   def isFireingUp = fireingUp
   def isFireingDown = fireingDown

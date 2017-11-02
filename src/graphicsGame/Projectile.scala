@@ -7,6 +7,7 @@ class Projectile(private var _x: Double, private var _y: Double, val level: Leve
   def isEnemy = false
   def isProjectile = true
   def isPlayer = false
+  def buildPassable : PassableEntity = new PassableEntity(3,_x,_y,width,height)
   
   def update(delay: Double): Unit = {
     if (movingUp) {
