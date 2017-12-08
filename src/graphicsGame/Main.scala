@@ -1,4 +1,4 @@
-package graphicsGame
+/*package graphicsGame
 
 import scalafx.Includes.eventClosureWrapperWithParam
 import scalafx.Includes.jfxKeyEvent2sfx
@@ -35,7 +35,7 @@ object Main extends JFXApp {
       var radnums = for (i <- 0 until dificulty) yield {
         randomInt(scala.util.Random.nextInt(30) + 1, scala.util.Random.nextInt(30) + 1)
       }
-      val player = new Player(radnums(0)_1, radnums(0)_2, level, false, false, false, false, false, false, false, false, 0)
+      val player = new Player(radnums(0)_1, radnums(0)_2, level, false, false, false, false, false, false, false, false, 0, true)
       level.+=(player)
       var alive = true
       
@@ -123,4 +123,4 @@ object Main extends JFXApp {
       timer.start()
     }
   }
-}
+}*/

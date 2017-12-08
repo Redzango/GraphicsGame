@@ -1,6 +1,6 @@
 package graphicsGame
 
-class Maze(val cellSize: Int, val wrap: Boolean, wallsInput: Array[Array[Int]]) {
+class Maze(val cellSize: Int, val wrap: Boolean, wallsInput: Array[Array[Int]]) extends Serializable{
   require(cellSize > 1, "The cell size must be at least 2.")
   require(wallsInput.length > 0 && wallsInput(0).length > 0, "Dimensions of maze must both be greater than 0.")
   private val walls = wallsInput.map(row => row.map(i => i).toArray).toArray
@@ -56,27 +56,7 @@ class Maze(val cellSize: Int, val wrap: Boolean, wallsInput: Array[Array[Int]]) 
     }
   }
 
-  val offsets = Array((-1, 0), (1, 0), (0, -1), (0, 1))
 
-  def bfs(sx: Int, sy: Int, ex: Int, ey: Int): Int = {
-    val q = new ArrayQueue[(Int, Int, Int)]()
-    q.enqueue((sx, sy, 0))
-    val visited = collection.mutable.Set[(Int, Int)]()
-    visited += sx -> sy
-    while (!q.isEmpty) {
-      val (x, y, steps) = q.dequeue()
-      for ((dx, dy) <- offsets) {
-        val (nx, ny) = (x + dx, y + dy)
-        if (nx == ex && ny == ey) return steps + 1
-        if (!visited.contains(nx -> ny) && nx >= 0 && nx < walls.length &&
-          ny >= 0 && ny < walls(nx).length && walls(nx)(ny) == 0) {
-          q.enqueue((nx, ny, steps + 1))
-          visited += nx -> ny
-        }
-      }
-    }
-    1000000
-  }
 
 }
 

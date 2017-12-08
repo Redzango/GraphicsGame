@@ -8,71 +8,78 @@ import scalafx.scene.Scene
 import scalafx.scene.canvas.Canvas
 import scalafx.scene.input.KeyCode
 import scalafx.scene.input.KeyEvent
+import java.rmi.server.UnicastRemoteObject
+import java.rmi.Naming
+import scalafx.application.Platform
+import scalafx.scene.paint.Color
+import scalafx.scene.canvas.GraphicsContext
+import scalafx.scene.text.Text
 
+@remote trait RemoteClient {
+  def update(level: PassableLevel): Unit
+  def draw: Unit
+}
 
-object ClientMain extends JFXApp {
+object ClientMain extends UnicastRemoteObject with JFXApp with RemoteClient {
+
+  val server = Naming.lookup("rmi://localhost/GraphicsGame") match {
+    case s: RemoteServer => s
+  }
+  val canvas = new Canvas(800, 800)
+  val gc = canvas.graphicsContext2D
+  val renderer = new Renderer2D(gc, 25)
+  val player = server.connect(this)
+
+  def update(level: PassableLevel): Unit = {
+    Platform.runLater(renderer.render(level, player.cx, player.cy))
+  }
+
+  def draw: Unit = {
+    gc.fill = Color.Black
+    gc.fillText(player.scor.toString(), 100, 100, 100)
+  }
+
   stage = new JFXApp.PrimaryStage {
     title = "Graphics Game"
     scene = new Scene(800, 800) {
-      val canvas = new Canvas(800, 800)
-      val gc = canvas.graphicsContext2D
-
       content = canvas
-
       /**
        * this makes random numbers and checks to see if it is on a wall
        */
-      val renderer = new Renderer2D(gc, 25)
 
       onKeyPressed = (ke: KeyEvent) => {
         ke.code match {
-          case KeyCode.Up => ServerMain.player.moveUpPressed
-          case KeyCode.Down => ServerMain.player.moveDownPressed
-          case KeyCode.Left => ServerMain.player.moveLeftPressed
-          case KeyCode.Right => ServerMain.player.moveRightPressed
-          case KeyCode.Space => ServerMain.player.firePressed
+          case KeyCode.Up => {
+            player.moveUpPressed
+            player.chLastMove(0)
+          }
+          case KeyCode.Down => {
+            player.moveDownPressed
+            player.chLastMove(1)
+          }
+          case KeyCode.Left => {
+            player.moveLeftPressed
+            player.chLastMove(2)
+          }
+          case KeyCode.Right => {
+            player.moveRightPressed
+            player.chLastMove(3)
+          }
+          case KeyCode.Space => player.firePressed
           case _ =>
         }
       }
       onKeyReleased = (ke: KeyEvent) => {
         ke.code match {
-          case KeyCode.Up => ServerMain.player.moveUpReleased
-          case KeyCode.Down => ServerMain.player.moveDownReleased
-          case KeyCode.Left => ServerMain.player.moveLeftReleased
-          case KeyCode.Right => ServerMain.player.moveRightReleased
-          case KeyCode.Space => ServerMain.player.fireReleased
+          case KeyCode.Up => player.moveUpReleased
+          case KeyCode.Down => player.moveDownReleased
+          case KeyCode.Left => player.moveLeftReleased
+          case KeyCode.Right => player.moveRightReleased
+          case KeyCode.Space => player.fireReleased
           case _ =>
-        }
-      }
-
-      /*def fire(): Unit = {
-        if (lastTime % 10 == 0) {
-          if (player.isFireingUp) level.+=(new Projectile(player.cx, player.cy, level, true, false, false, false))
-          if (player.isFireingDown) level.+=(new Projectile(player.cx, player.cy, level, false, true, false, false))
-          if (player.isFireingLeft) level.+=(new Projectile(player.cx, player.cy, level, false, false, true, false))
-          if (player.isFireingRight) level.+=(new Projectile(player.cx, player.cy, level, false, false, false, true))
-        }
-      }*/
-
-      def playerCol(): Unit = {
-        for (i <- 1 until ServerMain.level.entities.length) {
-          if (ServerMain.level.entities(0).intersect(ServerMain.level.entities(i))) {
-            ServerMain.player.isDie
-          }
-        }
-      }
-
-      def enemyCol(): Unit = {
-        for (i <- 0 until ServerMain.level.entities.length) {
-          for (j <- 0 until ServerMain.level.entities.length) {
-            if (ServerMain.level.entities(i).isEnemy && ServerMain.level.entities(j).isProjectile) {
-              if (ServerMain.level.entities(i).intersect(ServerMain.level.entities(j))) {
-                ServerMain.level.-=(ServerMain.level.entities(i))
-              }
-            }
-          }
         }
       }
     }
   }
+
 }

@@ -11,6 +11,8 @@ trait Entity {
   def isEnemy: Boolean
   def isProjectile: Boolean
   def isPlayer: Boolean
+  def isalive: Boolean
+
   
   def intersect(other: Entity): Boolean = {
       val intersectX = (cx - other.cx).abs < (width + other.width) / 2
