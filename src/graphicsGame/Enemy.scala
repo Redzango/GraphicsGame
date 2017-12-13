@@ -1,5 +1,7 @@
 package graphicsGame
-
+/**
+ * first type of enemy that moves randomly
+ */
 class Enemy(private var _x: Double, private var _y: Double, val level: Level, private var alive: Boolean, private var dir: Int) extends Entity {
   def cx = _x
   def cy = _y
@@ -9,7 +11,13 @@ class Enemy(private var _x: Double, private var _y: Double, val level: Level, pr
   def isPlayer = false
   def isalive = alive
   def buildPassable: PassableEntity = new PassableEntity(1, _x, _y, width, height)
-
+  def givePoints(p:Int):Unit ={
+    for (i <- level.entities) {
+      if(i.isPlayer){
+        i.getScore(p)
+      }
+    }
+  }
   def update(delay: Double): Unit = {
     tick += 1
     var num = scala.util.Random.nextInt(4)
@@ -28,7 +36,10 @@ class Enemy(private var _x: Double, private var _y: Double, val level: Level, pr
     }
     for (i <- level.entities) {
       if (i.isProjectile) {
-        if (intersect(i)) alive = false
+        if (intersect(i)) {
+          givePoints(5)
+          alive = false
+        }
       }
     }
   }

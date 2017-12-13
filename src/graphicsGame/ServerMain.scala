@@ -4,11 +4,15 @@ import scalafx.animation.AnimationTimer
 import java.rmi.server.UnicastRemoteObject
 import java.rmi.Naming
 import java.rmi.registry.LocateRegistry
-
+/**
+ * alows a remote server to acess the methods and info
+ */
 @remote trait RemoteServer {
   def connect(client: RemoteClient): RemotePlayer
 }
-
+/**
+ * the server object that creates the maze and level, runs the game, and connects to remote clients
+ */
 object ServerMain extends UnicastRemoteObject with App with RemoteServer {
   LocateRegistry.createRegistry(1099)
   Naming.rebind("GraphicsGame", this)
@@ -16,7 +20,6 @@ object ServerMain extends UnicastRemoteObject with App with RemoteServer {
   val maze = Maze.apply(5, false, 20, 20, .9)
   val level = new Level(maze, Nil)
   val dificulty = 9
- 
 
   def randomInt(num: Int, num2: Int): (Int, Int) = {
     if (level.maze.isClear(num, num2, 1.25, 1.25)) {
@@ -45,7 +48,7 @@ object ServerMain extends UnicastRemoteObject with App with RemoteServer {
   var clients: List[RemoteClient] = Nil
 
   def connect(client: RemoteClient): RemotePlayer = {
-    val player = new Player(radnums(0)_1, radnums(0)_2, level, false, false, false, false, false, 0, true,0)
+    val player = new Player(radnums(0)_1, radnums(0)_2, level, false, false, false, false, false, 0, true)
     clients ::= client
     level += player
     println("client connected")
@@ -60,10 +63,10 @@ object ServerMain extends UnicastRemoteObject with App with RemoteServer {
     val dt = (time - lastTick) * 1e-8
     if (dt > tickint) {
       level.updateAll(dt)
-      clients.foreach(_.draw)
       val pl = level.buildPassable
       for (p <- clients) {
         p.update(pl)
+        //p.draw
       }
       lastTick = time
     }

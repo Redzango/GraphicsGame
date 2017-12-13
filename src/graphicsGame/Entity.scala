@@ -1,7 +1,7 @@
 package graphicsGame
 
 /**
- *
+ *the trait for all entities in the game
  */
 trait Entity {
   def cx: Double
@@ -12,6 +12,8 @@ trait Entity {
   def isProjectile: Boolean
   def isPlayer: Boolean
   def isalive: Boolean
+  var score = 0
+  def getScore(i:Int):Unit = score += i
 
   
   def intersect(other: Entity): Boolean = {

@@ -1,5 +1,7 @@
 package graphicsGame
-
+/**
+ * the level class that has finctions for the level and the bfs search
+ */
 class Level(val maze: Maze, private var _entities: Seq[Entity]) {
   def entities = _entities
 
@@ -13,8 +15,9 @@ class Level(val maze: Maze, private var _entities: Seq[Entity]) {
 
   def updateAll(delay: Double): Unit = {
     _entities.foreach(_.update(delay))
-    for (i <- _entities)
-      if (!i.isalive) -=(i)
+    for (i <- _entities) {
+      if(!i.isalive)-=(i)
+    }
   }
 
   val offsets = Array((-1, 0), (1, 0), (0, -1), (0, 1))

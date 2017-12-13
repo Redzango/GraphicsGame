@@ -1,10 +1,12 @@
 package graphicsGame
 
 import java.rmi.server.UnicastRemoteObject
-
+/**
+ * the player class and all its methods
+ */
 class Player(private var _x: Double, private var _y: Double, val level: Level,
     private var movingUp: Boolean, private var movingDown: Boolean, private var movingLeft: Boolean, private var movingRight: Boolean,
-    private var fireing: Boolean, private var lastMove: Int, private var alive: Boolean, var score: Int) extends UnicastRemoteObject with Entity with RemotePlayer {
+    private var fireing: Boolean, private var lastMove: Int, private var alive: Boolean) extends UnicastRemoteObject with Entity with RemotePlayer {
   def cx = _x
   def cy = _y
   def isEnemy = false
@@ -15,7 +17,9 @@ class Player(private var _x: Double, private var _y: Double, val level: Level,
   var health = 3
   var invincable = false
   var invtick = 0
-  def scor = score
+  def scor:Int = score
+
+  def hp = health
 
   def update(delay: Double): Unit = {
     if (movingUp) {
@@ -95,7 +99,9 @@ class Player(private var _x: Double, private var _y: Double, val level: Level,
 
   def moveRightReleased(): Unit = movingRight = false
 }
-
+/**
+ * the remote trait to allow remote players to acces the player methods
+ */
 @remote trait RemotePlayer {
   def cx: Double
   def cy: Double
@@ -112,4 +118,5 @@ class Player(private var _x: Double, private var _y: Double, val level: Level,
   def isDie: Unit
   def chLastMove(dir: Int): Unit
   def scor: Int
+  def hp: Int
 }

@@ -1,5 +1,7 @@
 package graphicsGame
-
+/**
+ * type of non enemy entity shot by the player
+ */
 class Projectile(private var _x: Double, private var _y: Double, val level: Level,
     private var movingUp: Boolean, private var movingDown: Boolean, private var movingLeft: Boolean, private var movingRight: Boolean, private var alive: Boolean) extends Entity {
   def cx = _x
@@ -21,7 +23,7 @@ class Projectile(private var _x: Double, private var _y: Double, val level: Leve
       if (level.maze.isClear(_x - delay, _y, .5, .5)) _x -= delay * 2
     } else if (movingRight) {
       if (level.maze.isClear(_x + delay, _y, .5, .5)) _x += delay * 2
-    } 
+    }
     if (prex == _x && prey == _y) alive = false
     prex = _x
     prey = _y

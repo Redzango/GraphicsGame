@@ -1,5 +1,7 @@
 package graphicsGame
-
+/**
+ * class for the Bomber, the seconds type of enemy that uses a bfs shortest path
+ */
 class Bomber(private var _x: Double, private var _y: Double, val level: Level, private var alive: Boolean, private var dir: Int) extends Entity {
   def cx = _x
   def cy = _y
@@ -8,6 +10,13 @@ class Bomber(private var _x: Double, private var _y: Double, val level: Level, p
   def isPlayer = false
   def isalive = alive
   def setDir(i: Int): Unit = dir = i
+  def givePoints(p: Int): Unit = {
+    for (i <- level.entities) {
+      if (i.isPlayer) {
+        i.getScore(p)
+      }
+    }
+  }
 
   def buildPassable: PassableEntity = new PassableEntity(2, _x, _y, width, height)
 
@@ -27,7 +36,10 @@ class Bomber(private var _x: Double, private var _y: Double, val level: Level, p
     }
     for (i <- level.entities) {
       if (i.isProjectile) {
-        if (intersect(i)) alive = false
+        if (intersect(i)) {
+          givePoints(50)
+          alive = false
+        }
       }
     }
   }

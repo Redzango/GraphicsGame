@@ -2,6 +2,7 @@ package graphicsGame
 
 import scalafx.scene.canvas.GraphicsContext
 import scalafx.scene.image.Image
+import scalafx.scene.paint.Color
 
 /**
  * This is a 2D renderer that with draw your game elements to a Canvas. You should change the
@@ -65,12 +66,13 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
         case 2 => bomberImage
         case 4 => generatorImage
       }
-      if(level.maze.wrap) {
-        for(rx <- -1 to 1; ry <- -1 to 1)
-    	    gc.drawImage(img, blocksToPixelsX(e.cx-e.width/2+rx*level.maze.width), blocksToPixelsY(e.cy-e.height/2+ry*level.maze.height), e.width*blockSize, e.height*blockSize)
+      if (level.maze.wrap) {
+        for (rx <- -1 to 1; ry <- -1 to 1)
+          gc.drawImage(img, blocksToPixelsX(e.cx - e.width / 2 + rx * level.maze.width), blocksToPixelsY(e.cy - e.height / 2 + ry * level.maze.height), e.width * blockSize, e.height * blockSize)
       } else {
-    	  gc.drawImage(img, blocksToPixelsX(e.cx-e.width/2), blocksToPixelsY(e.cy-e.height/2), e.width*blockSize, e.height*blockSize)
+        gc.drawImage(img, blocksToPixelsX(e.cx - e.width / 2), blocksToPixelsY(e.cy - e.height / 2), e.width * blockSize, e.height * blockSize)
       }
     }
+ 
   }
 }

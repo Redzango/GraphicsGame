@@ -14,12 +14,16 @@ import scalafx.application.Platform
 import scalafx.scene.paint.Color
 import scalafx.scene.canvas.GraphicsContext
 import scalafx.scene.text.Text
-
+/**
+ * remote trait
+ */
 @remote trait RemoteClient {
   def update(level: PassableLevel): Unit
   def draw: Unit
 }
-
+/**
+ * the client main that process input from the remote player
+ */
 object ClientMain extends UnicastRemoteObject with JFXApp with RemoteClient {
 
   val server = Naming.lookup("rmi://localhost/GraphicsGame") match {
@@ -32,6 +36,7 @@ object ClientMain extends UnicastRemoteObject with JFXApp with RemoteClient {
 
   def update(level: PassableLevel): Unit = {
     Platform.runLater(renderer.render(level, player.cx, player.cy))
+    Platform.runLater(gc.fillText("Score: "+player.scor.toString()+"\t Lives: "+player.hp.toString, 100, 100, 100))
   }
 
   def draw: Unit = {
